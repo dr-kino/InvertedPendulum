@@ -43,6 +43,10 @@
 
 
 /* USER CODE BEGIN (0) */
+#include "FreeRTOS.h"
+#include "os_task.h"
+#include "het.h"
+#include "gio.h"
 /* USER CODE END */
 
 /* Include Files */
@@ -50,6 +54,8 @@
 #include "sys_common.h"
 #include "stdio.h"
 /* USER CODE BEGIN (1) */
+void TaskControlLedOne(void *pvParameters);
+void TaskControlLedTwo(void *pvParameters);
 /* USER CODE END */
 
 /** @fn void main(void)
@@ -61,20 +67,48 @@
 */
 
 /* USER CODE BEGIN (2) */
+xTaskHandle xTask1Handle;
+xTaskHandle xTask2Handle;
 /* USER CODE END */
 
-int main(void)
+void main(void)
 {
 /* USER CODE BEGIN (3) */
+    hetInit();
+    gioInit();
+    gioSetDirection(hetPORT1, 0xFFFFFFFF);
+    gioSetDirection(gioPORTA, 0xFFFFFFFF);
+
+    //gioSetBit(hetPORT1, 8, gioGetBit(hetPORT1, 8) ^ 1);
+    //gioSetBit(hetPORT1, 8, gioGetBit(hetPORT1, 8) ^ 1);
+    //gioSetBit(gioPORTA, 2, gioGetBit(gioPORTA, 2) ^ 1);
+    //gioSetBit(gioPORTA, 2, gioGetBit(gioPORTA, 2) ^ 1);
+
+    xTaskCreate(TaskControlLedOne, (const portCHAR *) "TurnOn", 128, NULL, 1, &xTask1Handle);
+    xTaskCreate(TaskControlLedTwo, (const portCHAR *) "TurnOff", 128, NULL, 1, xTask2Handle);
+
+    vTaskStartScheduler();
+
+    while(1);
 /* USER CODE END */
-    int i, j;
-
-    for(i = 0; i < 10; i++)
-        j = i;
-
-    return 0;
 }
 
-
 /* USER CODE BEGIN (4) */
+void TaskControlLedOne(void *pvParameters)
+{
+    for(;;)
+    {
+        gioSetBit(hetPORT1, 8, gioGetBit(hetPORT1, 8) ^ 1);
+        vTaskDelay(100);
+    }
+}
+
+void TaskControlLedTwo(void *pvParameters)
+{
+    for(;;)
+    {
+        gioSetBit(gioPORTA, 2, gioGetBit(gioPORTA, 2) ^ 1);
+        vTaskDelay(400);
+    }
+}
 /* USER CODE END */
