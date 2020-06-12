@@ -85,7 +85,14 @@ void main(void)
     //gioSetBit(gioPORTA, 2, gioGetBit(gioPORTA, 2) ^ 1);
 
     xTaskCreate(TaskControlLedOne, (const portCHAR *) "TurnOn", 128, NULL, 1, &xTask1Handle);
-    xTaskCreate(TaskControlLedTwo, (const portCHAR *) "TurnOff", 128, NULL, 1, xTask2Handle);
+    xTaskCreate(TaskControlLedTwo, (const portCHAR *) "TurnOff", 128, NULL, 1, &xTask2Handle);
+
+    //xTaskCreate(TaskMain, (const portCHAR *) "Main", 128, NULL, 1, &xTask1Handle);)
+    //xTaskCreate(TaskControlMotorR, (const portCHAR *) "MotorR", 128, NULL, 1, &xTask2Handle);
+    //xTaskCreate(TaskControlMotorL, (const portCHAR *) "MotorL", 128, NULL, 1, &xTask3Handle);
+    //xTaskCreate(TaskTelemetry, (const portCHAR *) "Telemetry", 128, NULL, 1, &xTask4Handle);
+    //xTaskCreate(TaskDataAcquisition, (const portCHAR *) "DataAcquisition", 128, NULL, 1, &xTask5Handle);
+    //xTaskCreate(TaskSystemMonitor, (const portCHAR *) "SystemMonitor", 128, NULL, 1, &xTask6Handle);
 
     vTaskStartScheduler();
 
