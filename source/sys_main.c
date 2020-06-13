@@ -47,13 +47,16 @@
 #include "os_task.h"
 #include "het.h"
 #include "gio.h"
+#include "sci.h"
 /* USER CODE END */
 
 /* Include Files */
 
 #include "sys_common.h"
 #include "stdio.h"
-/* USER CODE BEGIN (1) */
+/* USER CODE BEGIN (1)/home/rcavalcanti/.wine/drive_c/users/rcavalcanti/HerculesFreeRTOS/include
+/home/rcavalcanti/.wine/drive_c/users/rcavalcanti/HerculesFreeRTOS/source/home/rcavalcanti/.wine/drive_c/users/rcavalcanti/HerculesFreeRTOS/include
+/home/rcavalcanti/.wine/drive_c/users/rcavalcanti/HerculesFreeRTOS/source */
 void TaskControlLedOne(void *pvParameters);
 void TaskControlLedTwo(void *pvParameters);
 /* USER CODE END */
@@ -69,13 +72,25 @@ void TaskControlLedTwo(void *pvParameters);
 /* USER CODE BEGIN (2) */
 xTaskHandle xTask1Handle;
 xTaskHandle xTask2Handle;
+
+static unsigned char command;
 /* USER CODE END */
 
 void main(void)
 {
 /* USER CODE BEGIN (3) */
+    _enable_IRQ();
+
     hetInit();
     gioInit();
+    sciInit();
+
+    /* Send user character */
+    sciSend(scilinREG, 21, (unsigned char*) "Please press a key!\r\n");
+
+    /* Await user character */
+    sciReceive(scilinREG, 1, (unsigned char*)&command);
+
     gioSetDirection(hetPORT1, 0xFFFFFFFF);
     gioSetDirection(gioPORTA, 0xFFFFFFFF);
 
@@ -117,5 +132,24 @@ void TaskControlLedTwo(void *pvParameters)
         gioSetBit(gioPORTA, 2, gioGetBit(gioPORTA, 2) ^ 1);
         vTaskDelay(400);
     }
+}
+
+void sciNotification(sciBASE_t  *sci, unsigned flags)
+{
+    /* Echo received character */
+    sciSend(sci, 1, (unsigned char *)&command);
+
+    /* Await user character */
+    sciReceive(sci, 1, (unsigned char*)&command);
+}
+
+void esmGroup1Notification(int bit)
+{
+    return;
+}
+
+void esmGroup2Notification(int bit)
+{
+    return;
 }
 /* USER CODE END */

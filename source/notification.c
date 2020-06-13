@@ -53,7 +53,6 @@
 #include "adc.h"
 #include "can.h"
 #include "gio.h"
-#include "lin.h"
 #include "mibspi.h"
 #include "sci.h"
 #include "spi.h"
@@ -159,16 +158,6 @@ void gioNotification(gioPORT_t *port, uint32 bit)
 }
 
 /* USER CODE BEGIN (20) */
-/* USER CODE END */
-#pragma WEAK(linNotification)
-void linNotification(linBASE_t *lin, uint32 flags)      
-{
-/*  enter user code between the USER CODE BEGIN and USER CODE END. */
-/* USER CODE BEGIN (23) */
-/* USER CODE END */
-}
-
-/* USER CODE BEGIN (24) */
 /* USER CODE END */
 #pragma WEAK(mibspiNotification)
 void mibspiNotification(mibspiBASE_t *mibspi, uint32 flags)
