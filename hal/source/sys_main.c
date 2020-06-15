@@ -45,6 +45,12 @@
 /* USER CODE BEGIN (0) */
 #include "FreeRTOS.h"
 #include "os_task.h"
+#include "task_main.h"
+#include "task_control_motor_left.h"
+#include "task_control_motor_rigth.h"
+#include "task_data_acquisition.h"
+#include "task_system_monitor.h"
+#include "task_telemetry.h"
 #include "het.h"
 #include "gio.h"
 #include "sci.h"
@@ -72,6 +78,12 @@ void TaskControlLedTwo(void *pvParameters);
 /* USER CODE BEGIN (2) */
 xTaskHandle xTask1Handle;
 xTaskHandle xTask2Handle;
+xTaskHandle xTask3Handle;
+xTaskHandle xTask4Handle;
+xTaskHandle xTask5Handle;
+xTaskHandle xTask6Handle;
+xTaskHandle xTask7Handle;
+xTaskHandle xTask8Handle;
 
 static unsigned char command;
 /* USER CODE END */
@@ -102,12 +114,12 @@ void main(void)
     xTaskCreate(TaskControlLedOne, (const portCHAR *) "TurnOn", 128, NULL, 1, &xTask1Handle);
     xTaskCreate(TaskControlLedTwo, (const portCHAR *) "TurnOff", 128, NULL, 1, &xTask2Handle);
 
-    //xTaskCreate(TaskMain, (const portCHAR *) "Main", 128, NULL, 1, &xTask1Handle);)
-    //xTaskCreate(TaskControlMotorR, (const portCHAR *) "MotorR", 128, NULL, 1, &xTask2Handle);
-    //xTaskCreate(TaskControlMotorL, (const portCHAR *) "MotorL", 128, NULL, 1, &xTask3Handle);
-    //xTaskCreate(TaskTelemetry, (const portCHAR *) "Telemetry", 128, NULL, 1, &xTask4Handle);
-    //xTaskCreate(TaskDataAcquisition, (const portCHAR *) "DataAcquisition", 128, NULL, 1, &xTask5Handle);
-    //xTaskCreate(TaskSystemMonitor, (const portCHAR *) "SystemMonitor", 128, NULL, 1, &xTask6Handle);
+    xTaskCreate(TaskMain, (const portCHAR *) "Main", 128, NULL, 1, &xTask3Handle);
+    xTaskCreate(TaskControlMotorR, (const portCHAR *) "MotorR", 128, NULL, 1, &xTask4Handle);
+    xTaskCreate(TaskControlMotorL, (const portCHAR *) "MotorL", 128, NULL, 1, &xTask5Handle);
+    xTaskCreate(TaskTelemetry, (const portCHAR *) "Telemetry", 128, NULL, 1, &xTask6Handle);
+    xTaskCreate(TaskDataAcquisition, (const portCHAR *) "DataAcquisition", 128, NULL, 1, &xTask7Handle);
+    xTaskCreate(TaskSystemMonitor, (const portCHAR *) "SystemMonitor", 128, NULL, 1, &xTask8Handle);
 
     vTaskStartScheduler();
 
